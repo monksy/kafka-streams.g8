@@ -4,12 +4,27 @@ This template uses kafka-streams library from Apache Kafka.
 
 ## Running
 ```bash
-sbt new idarlington/kafka-streams.g8
+sbt new monksy/kafka-streams.g8
 ```
 
+TODO
+----
+ * Add healthchecks 
+ * Upgrade to Kafka 2.5
+ * Add assembly plugin to the build
+ * Add in style checks 
+ * Add in wort removers 
+ * Beef up the default documentation
+ * Add Minimal Code coverage to keep things running well
+ * Clean up the kafka config section in the app config
+ * Add a docker file 
+ * Bleed in Kafka settings via the properties file rather than setting them
+
+ 
 Template license
 ----------------
-Written in 2018 by [Ogbajie Ikenna](https://twitter.com/idarlington)
+
+Based on the template by [Ogbajie Ikenna](https://twitter.com/idarlington)
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
 and neighboring rights to this template to the public domain worldwide.

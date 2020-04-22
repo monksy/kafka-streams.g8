@@ -1,6 +1,6 @@
 package $package$
 
-import com.typesafe.config.{ Config, ConfigFactory }
+import com.typesafe.config.{Config, ConfigFactory}
 
 object StreamSettings {
   val conf: Config = ConfigFactory.load()

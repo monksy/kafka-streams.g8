@@ -4,12 +4,7 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.streams.kstream.Printed
-import org.apache.kafka.streams.scala.ImplicitConversions._
-import org.apache.kafka.streams.scala.Serdes._
-import org.apache.kafka.streams.scala.StreamsBuilder
-import org.apache.kafka.streams.scala.kstream.{ KStream, KTable }
-import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
+import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
 
 /**
   * A kafka streams application that reads records words from an input topic and counts the occurrence of each word
@@ -22,7 +17,7 @@ import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
   * kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic streams-wordcount-output
   *
   */
-object WordCount extends App {
+object App extends App {
 
   val config = new Properties()
   // setting offset reset to earliest so that we can re-run the app with same data
@@ -33,23 +28,9 @@ object WordCount extends App {
   // preferable during development, update value for production use
   config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0L: java.lang.Long)
 
-  def topology(): StreamsBuilder = {
-    val builder: StreamsBuilder = new StreamsBuilder
-    val textLines: KStream[String, String] =
-      builder.stream[String, String](StreamSettings.inputTopic)
 
-    val wordCount: KTable[String, Long] = textLines
-      .flatMapValues(words => words.split("\\\\W+"))
-      .groupBy((_, word) => word)
-      .count()
 
-    wordCount.toStream.print(Printed.toSysOut[String, Long])
-    wordCount.toStream.to(StreamSettings.outputTopic)
-
-    builder
-  }
-
-  val wordStream = new KafkaStreams(topology().build(), config)
+  val wordStream = new KafkaStreams(StreamTopology.topology().build(), config)
   wordStream.start()
 
   // attach shutdown handler to catch control-c
